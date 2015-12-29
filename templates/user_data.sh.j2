@@ -2,9 +2,4 @@
 
 ENV={{env}}
 
-# TODO: wrap these in conditionals
-# as deploy via $app_repo/install
-#sudo deploy -c ansible-playbook /opt/app/rails/install/post-instantiation.yml
-
-# as root:
 ansible-playbook {{post_instantiantion_playbook_path}} -e env=$ENV
