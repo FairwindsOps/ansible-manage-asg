@@ -16,8 +16,8 @@ asg_wait_for_instances: no
 asg_default_cooldown: 1
 
 # For user_data.sh
-post_instantiantion_playbook_path: '/opt/app/post-instantiation.yml'
-
+asg_post_instantiantion_playbook_path: '/opt/app/post-instantiation.yml'
+asg_app_post_instantiantion_playbook_path: '/opt/app/rails/reactive/install.yml'
 
 asg_default_instance_type: 't2.medium'
 
