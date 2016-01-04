@@ -1,7 +1,7 @@
 ---
 
 asg_assign_public_ip: no
-deploy_user: 'deploy'
+asg_deploy_user: 'deploy'
 asg_health_check_period: 60
 asg_health_check_type: 'EC2'
 

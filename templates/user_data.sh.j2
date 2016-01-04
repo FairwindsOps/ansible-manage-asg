@@ -3,4 +3,4 @@
 ENV={{env}}
 
 ansible-playbook {{ asg_post_instantiantion_playbook_path }} -e env=$ENV
-su - {{ deploy_user }} -c "ansible-playbook {{ asg_app_post_instantiantion_playbook_path }} -e env=$ENV"
+su - {{ asg_deploy_user }} -c "ansible-playbook {{ asg_app_post_instantiantion_playbook_path }} -e env=$ENV"
