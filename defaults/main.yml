@@ -20,6 +20,3 @@ asg_post_instantiantion_playbook_path: '/opt/app/post-instantiation.yml'
 asg_app_post_instantiantion_playbook_path: '/opt/app/rails/reactive/install.yml'
 
 asg_default_instance_type: 't2.medium'
-
-asg_async:  10
-asg_poll:   0
