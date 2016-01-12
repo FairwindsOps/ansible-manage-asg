@@ -11,17 +11,7 @@
     user_data:               "{{ lookup('template', './user_data.sh.j2') }}"
     instance_profile_name:   "{{ env }}_web"
 
-- name: describe-auto-scaling-groups
-  shell: >
-    aws autoscaling describe-auto-scaling-groups --region {{ aws_region }} --auto-scaling-group-names {{ env }}-{{ stack }}-{{ layer }}
-  register: describe_auto_scaling_groups_output
-
-- name: set describe_auto_scaling_groups_output_json
-  set_fact:
-    describe_auto_scaling_groups_output_json: "{{describe_auto_scaling_groups_output.stdout | from_json }}"
-
-# The conditional at the end of this task ensures that the autoscaling group is created only if it does not exist
-- name: create autoscaling group
+- name: update autoscaling group
   ec2_asg:
     name:                    "{{ env }}-{{ stack }}-{{ layer }}"
     load_balancers:          [ "{{ web_elb }}"]
@@ -43,19 +33,6 @@
       - Stack: "{{ stack }}"
       - Layer: "{{ layer }}"
       - Name:  "{{ env }}-{{ stack }}-{{ layer }}"
-  when: (describe_auto_scaling_groups_output_json.AutoScalingGroups[0] is defined) and (describe_auto_scaling_groups_output_json.AutoScalingGroups[0].AutoScalingGroupName != {{ env }}-{{ stack }}-{{ layer }})
+  async:                     "{{ asg_async }}"
+  poll:                      "{{ asg_poll }}"
 
-- name: update autoscaling group via aws cli
-  shell: >
-    aws autoscaling update-auto-scaling-group
-    --region                    "{{ aws_region }}"
-    --auto-scaling-group-name   "{{ env }}-{{ stack }}-{{ layer }}"
-    --launch-configuration-name "{{ env }}-{{ stack }}-{{ layer }}-{{ new_ami_id }}"
-    --min-size                  "{{ asg_min_size }}"
-    --max-size                  "{{ asg_max_size }}"
-    --desired-capacity          "{{ asg_desired_capacity }}"
-    --default-cooldown          "{{ asg_default_cooldown }}"
-    --availability-zones         {{ asg_availability_zones| join(" ") }}
-    --health-check-type         "{{ asg_health_check_type }}"
-    --health-check-grace-period "{{ asg_health_check_period }}"
-    --vpc-zone-identifier        {{ asg_vpc_zone_identifier | join(",") }}
