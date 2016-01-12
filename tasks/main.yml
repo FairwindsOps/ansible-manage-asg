@@ -33,6 +33,5 @@
       - Stack: "{{ stack }}"
       - Layer: "{{ layer }}"
       - Name:  "{{ env }}-{{ stack }}-{{ layer }}"
-  async:                     "{{ asg_async }}"
-  poll:                      "{{ asg_poll }}"
-
+  #async:                     "{{ asg_async }}"
+  #poll:                      "{{ asg_poll }}"
