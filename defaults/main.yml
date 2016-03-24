@@ -13,6 +13,7 @@ manage_asg_desired_capacity: 1
 manage_asg_region: "{{aws_region}}"
 manage_asg_vpc_zone_identifier: [ "{{private_working_az1}}" ]
 manage_asg_wait_for_instances: no
+manage_asg_wait_timeout: 300
 manage_asg_default_cooldown: 1
 
 # For user_data.sh
