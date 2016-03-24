@@ -1,0 +1,47 @@
+---
+- name: update launch config
+  ec2_lc:
+    name: "{{env}}-{{stack}}-{{layer}}-{{ new_ami_id }}"
+    image_id: "{{ new_ami_id }}"
+    key_name: "{{ aws_key_name }}"
+    security_groups: [ "{{ hostvars[inventory_hostname][env + '_application'] }}" ]
+    region: "{{ aws_region }}"
+    instance_type: "{{default_instance_type}}"
+    assign_public_ip: "{{manage_asg_assign_public_ip}}"
+    user_data: "{{ lookup('template', './user_data.sh.j2') }}"
+    instance_profile_name: "{{env}}_web"
+
+# # pre-traffic tasks: ones that are n & n+1 compatible
+# #   bring up an instance and run those tasks on it
+# #   kill that instance
+
+- name: update autoscaling group
+  become: yes
+  become_user: "{{deploy_user}}"
+  ec2_asg:
+    name: "{{env}}-{{stack}}-{{layer}}"
+    load_balancers: ["{{web_elb}}"]
+    launch_config_name: "{{env}}-{{stack}}-{{layer}}-{{ new_ami_id }}"
+    health_check_period: "{{manage_asg_health_check_period}}"
+    health_check_type: "{{manage_asg_health_check_type}}"
+    replace_all_instances: "{{manage_asg_replace_all_instances}}"
+    replace_batch_size: "{{manage_asg_replace_batch_size}}"
+    min_size: "{{manage_asg_min_size}}"
+    max_size: "{{manage_asg_max_size}}"
+    desired_capacity: "{{manage_asg_desired_capacity}}"
+    region: "{{aws_region}}"
+    # Adding all 3 here throws an error: "The availability zones of the specified subnets and the AutoScalingGroup do not match"
+    vpc_zone_identifier: [ "{{private_working_az1}}" ]
+    wait_for_instances: "{{manage_asg_wait_for_instances}}"
+    wait_timeout: "{{manage_asg_wait_timeout}}"
+    # TODO: Change this
+    default_cooldown: "{{manage_asg_default_cooldown}}"
+    tags:
+      - Env: "{{env}}"
+      - Stack: "{{stack}}"
+      - Layer: "{{layer}}"
+      - Name: "{{env}}-{{stack}}-{{layer}}"
+
+# post-traffic tasks: ones that are meant to be run once the ASG is using the new AMI ID:
+# 1. wait for a single new instance that is running
+# 2. run the tasks there.

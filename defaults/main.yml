@@ -1,0 +1,20 @@
+---
+
+manage_asg_assign_public_ip: no
+deploy_user: 'deploy'
+manage_asg_health_check_period: 60
+manage_asg_health_check_type: 'EC2'
+
+manage_asg_replace_all_instances: yes
+manage_asg_replace_batch_size: 1
+manage_asg_min_size: 1
+manage_asg_max_size: 1
+manage_asg_desired_capacity: 1
+manage_asg_region: "{{aws_region}}"
+manage_asg_vpc_zone_identifier: [ "{{private_working_az1}}" ]
+manage_asg_wait_for_instances: no
+manage_asg_wait_timeout: 300
+manage_asg_default_cooldown: 1
+
+# For user_data.sh
+post_instantiantion_playbook_path: '/opt/app/post-instantiation.yml'
