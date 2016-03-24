@@ -33,6 +33,7 @@
     # Adding all 3 here throws an error: "The availability zones of the specified subnets and the AutoScalingGroup do not match"
     vpc_zone_identifier: [ "{{private_working_az1}}" ]
     wait_for_instances: "{{manage_asg_wait_for_instances}}"
+    wait_timeout: "{{manage_asg_wait_timeout}}"
     # TODO: Change this
     default_cooldown: "{{manage_asg_default_cooldown}}"
     tags:
