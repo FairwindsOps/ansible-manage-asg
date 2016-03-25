@@ -31,7 +31,7 @@
     desired_capacity: "{{manage_asg_desired_capacity}}"
     region: "{{aws_region}}"
     # Adding all 3 here throws an error: "The availability zones of the specified subnets and the AutoScalingGroup do not match"
-    vpc_zone_identifier: [ "{{private_working_az1}}" ]
+    vpc_zone_identifier: [ "{{private_working_az1}}", "{{private_working_az2}}", "{{private_working_az3}}" ]
     wait_for_instances: "{{manage_asg_wait_for_instances}}"
     wait_timeout: "{{manage_asg_wait_timeout}}"
     # TODO: Change this
