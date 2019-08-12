@@ -27,7 +27,7 @@ Example Playbook
         when: set_vpc_json.Vpcs[0] is defined
 
   roles:
-    - { role: reactiveops.get-vpc-facts-master, tags: ['facts'] }
-    - { role: reactiveops.manage-asg-master, tags: ['asg'], new_ami_id: "{{ami_id_from_launch_configuration}}", web_elb: "{{env}}-{{stack}}-{{layer}}" }
+    - { role: fairwinds.get-vpc-facts-master, tags: ['facts'] }
+    - { role: fairwinds.manage-asg-master, tags: ['asg'], new_ami_id: "{{ami_id_from_launch_configuration}}", web_elb: "{{env}}-{{stack}}-{{layer}}" }
 
 ```
